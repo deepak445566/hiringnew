@@ -1,0 +1,3 @@
+# .gitignore file edit karo
+echo ".next/" >> .gitignore
+echo "node_modules/" >> .gitignore

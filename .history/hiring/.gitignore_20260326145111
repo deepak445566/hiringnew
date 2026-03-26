@@ -1,0 +1,5 @@
+# .gitignore file edit karo
+echo ".next/
+node_modules/
+.DS_Store
+*.log" > .gitignore
