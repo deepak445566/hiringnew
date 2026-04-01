@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Anyone can submit applications
+    match /job_applications/{document} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null && request.auth.token.email == 'admin@gmail.com';
+    }
+    
+    // Admin can read/write users
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.token.email == 'admin@gmail.com';
+    }
+  }
+}

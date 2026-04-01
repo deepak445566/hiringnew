@@ -1,0 +1,457 @@
+"use client";
+
+import React, { useState, useEffect } from 'react';
+import { 
+  FaUser, 
+  FaEnvelope, 
+  FaPhoneAlt, 
+  FaBriefcase, 
+  FaCommentDots, 
+  FaInfoCircle, 
+  FaExclamationCircle, 
+  FaCheckCircle, 
+  FaSpinner, 
+  FaWhatsapp,
+  FaUndoAlt,
+  FaDatabase,
+  FaUserCheck
+} from 'react-icons/fa';
+import { db, auth } from '@/firebase/config';
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+
+const JobApplicationForm = () => {
+  // Form state
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    jobPreference: '',
+    message: ''
+  });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [status, setStatus] = useState({ type: '', message: '' });
+  const [user, setUser] = useState(null);
+  const [isRegistered, setIsRegistered] = useState(false);
+  
+  // WhatsApp target number
+  const WHATSAPP_NUMBER = "+918929123678";
+  
+  // Check authentication status on component mount
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        setIsRegistered(true);
+        // Auto-fill email if user is logged in
+        setFormData(prev => ({
+          ...prev,
+          email: currentUser.email || ''
+        }));
+      } else {
+        setUser(null);
+        setIsRegistered(false);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+  
+  // Job options
+  const jobOptions = [
+    { value: '', label: '-- Select Job Preference --' },
+    { value: 'software-engineer', label: 'Software Engineer' },
+    { value: 'senior-software-engineer', label: 'Senior Software Engineer' },
+    { value: 'frontend-developer', label: 'Frontend Developer' },
+    { value: 'backend-developer', label: 'Backend Developer' },
+    { value: 'fullstack-developer', label: 'Full Stack Developer' },
+    { value: 'web-developer', label: 'Web Developer' },
+    { value: 'mobile-app-developer', label: 'Mobile App Developer' },
+    { value: 'ui-ux-designer', label: 'UI/UX Designer' },
+    { value: 'graphic-designer', label: 'Graphic Designer' },
+    { value: 'product-manager', label: 'Product Manager' },
+    { value: 'project-manager', label: 'Project Manager' },
+    { value: 'data-analyst', label: 'Data Analyst' },
+    { value: 'data-scientist', label: 'Data Scientist' },
+    { value: 'devops-engineer', label: 'DevOps Engineer' },
+    { value: 'qa-engineer', label: 'QA Engineer' },
+    { value: 'technical-support', label: 'Technical Support' },
+    { value: 'system-administrator', label: 'System Administrator' },
+    { value: 'database-administrator', label: 'Database Administrator' },
+    { value: 'network-engineer', label: 'Network Engineer' },
+    { value: 'cybersecurity-analyst', label: 'Cybersecurity Analyst' },
+    { value: 'cloud-engineer', label: 'Cloud Engineer' },
+    { value: 'ai-ml-engineer', label: 'AI/ML Engineer' },
+    { value: 'business-analyst', label: 'Business Analyst' },
+    { value: 'marketing-manager', label: 'Marketing Manager' },
+    { value: 'sales-manager', label: 'Sales Manager' },
+    { value: 'hr-manager', label: 'HR Manager' },
+    { value: 'content-writer', label: 'Content Writer' },
+    { value: 'digital-marketer', label: 'Digital Marketer' },
+    { value: 'seo-specialist', label: 'SEO Specialist' },
+    { value: 'other', label: 'Other' }
+  ];
+  
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    if (status.message) {
+      setStatus({ type: '', message: '' });
+    }
+  };
+  
+  // Get job label from value
+  const getJobLabel = (value) => {
+    const job = jobOptions.find(j => j.value === value);
+    return job ? job.label : value;
+  };
+  
+  // Validate form
+  const validateForm = () => {
+    if (!formData.fullName.trim()) {
+      setStatus({ type: 'error', message: '❌ Please enter your full name' });
+      return false;
+    }
+    
+    if (!formData.email.trim()) {
+      setStatus({ type: 'error', message: '❌ Please enter your email address' });
+      return false;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setStatus({ type: 'error', message: '❌ Please enter a valid email address' });
+      return false;
+    }
+    
+    if (!formData.phone.trim()) {
+      setStatus({ type: 'error', message: '❌ Please enter your phone number' });
+      return false;
+    }
+    
+    const phoneRegex = /^[\d\s+\-()]{10,15}$/;
+    if (!phoneRegex.test(formData.phone.replace(/\s/g, ''))) {
+      setStatus({ type: 'error', message: '❌ Please enter a valid phone number (10-15 digits)' });
+      return false;
+    }
+    
+    if (!formData.jobPreference) {
+      setStatus({ type: 'error', message: '❌ Please select your job preference' });
+      return false;
+    }
+    
+    return true;
+  };
+  
+  // Save to Firebase
+  const saveToFirebase = async (applicationData) => {
+    try {
+      const docRef = await addDoc(collection(db, "job_applications"), {
+        fullName: applicationData.fullName,
+        email: applicationData.email,
+        phone: applicationData.phone,
+        jobPreference: applicationData.jobPreference,
+        jobLabel: applicationData.jobLabel,
+        message: applicationData.message,
+        userId: user?.uid || null,
+        userEmail: user?.email || applicationData.email,
+        status: 'pending',
+        appliedFrom: 'web_form',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+      return { success: true, id: docRef.id };
+    } catch (error) {
+      console.error("Firebase save error:", error);
+      return { success: false, error: error.message };
+    }
+  };
+  
+  // Send WhatsApp message
+  const sendWhatsApp = (applicationData) => {
+    const currentDate = new Date().toLocaleString('en-IN', { 
+      dateStyle: 'full',
+      timeStyle: 'short'
+    });
+    
+    const message = `*📋 NEW JOB APPLICATION*\n\n` +
+      `*👤 Name:* ${applicationData.fullName}\n` +
+      `*📧 Email:* ${applicationData.email}\n` +
+      `*📱 Phone:* ${applicationData.phone}\n` +
+      `*💼 Job Preference:* ${applicationData.jobLabel}\n` +
+      `*💬 Message:* ${applicationData.message || 'No message provided'}\n\n` +
+      `*📅 Applied on:* ${currentDate}\n\n` +
+      `🔔 *Note:* Please find my resume attached separately in this WhatsApp chat.\n` +
+      `Thank you for your consideration! 🙏`;
+    
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+  };
+  
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      const applicationData = {
+        fullName: formData.fullName.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        jobPreference: formData.jobPreference,
+        jobLabel: getJobLabel(formData.jobPreference),
+        message: formData.message.trim() || ''
+      };
+      
+      // First save to Firebase
+      const firebaseResult = await saveToFirebase(applicationData);
+      
+      if (!firebaseResult.success) {
+        throw new Error(firebaseResult.error);
+      }
+      
+      // Then send WhatsApp message
+      sendWhatsApp(applicationData);
+      
+      setStatus({ 
+        type: 'success', 
+        message: `✅ Application saved to database! WhatsApp opened. Please attach your resume and send the message. Application ID: ${firebaseResult.id}` 
+      });
+      
+      // Reset form
+      setFormData({
+        fullName: '',
+        email: user?.email || '',
+        phone: '',
+        jobPreference: '',
+        message: ''
+      });
+      
+    } catch (error) {
+      console.error('Error:', error);
+      setStatus({ type: 'error', message: `❌ Error: ${error.message}. Please try again.` });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+  // Reset form
+  const resetForm = () => {
+    setFormData({
+      fullName: '',
+      email: user?.email || '',
+      phone: '',
+      jobPreference: '',
+      message: ''
+    });
+    setStatus({ type: '', message: '' });
+  };
+  
+  return (
+    <div className="min-h-screen bg-gradient-to-r from-[#18403C] to-[#2c6b64] py-8 px-4">
+      <div className="max-w-4xl mx-auto mt-20 lg:mt-10">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+            Job Application Form
+          </h1>
+          <p className="text-white">
+            Fill your details and send application via WhatsApp
+          </p>
+          
+          {/* User Status Badge */}
+          <div className="mt-4 inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+            {isRegistered ? (
+              <>
+                <FaUserCheck className="text-green-400" />
+                <span className="text-white text-sm">Logged in as: {user?.email}</span>
+              </>
+            ) : (
+              <>
+                <FaInfoCircle className="text-yellow-400" />
+                <span className="text-white text-sm">Not registered? Please register first to save your application</span>
+              </>
+            )}
+          </div>
+        </div>
+        
+        {/* Form Card */}
+        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-6">
+            {/* Full Name */}
+            <div>
+              <label className="block text-gray-700 font-semibold mb-2">
+                <FaUser className="inline text-indigo-500 mr-2" />
+                Full Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                placeholder="Enter your full name"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent outline-none transition bg-gray-50 focus:bg-white"
+              />
+            </div>
+            
+            {/* Email */}
+            <div>
+              <label className="block text-gray-700 font-semibold mb-2">
+                <FaEnvelope className="inline text-indigo-500 mr-2" />
+                Email Address <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="you@example.com"
+                disabled={isRegistered}
+                className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent outline-none transition ${
+                  isRegistered ? 'bg-gray-100 cursor-not-allowed' : 'bg-gray-50 focus:bg-white'
+                }`}
+              />
+              {isRegistered && (
+                <p className="text-xs text-green-600 mt-1">Email auto-filled from your account</p>
+              )}
+            </div>
+            
+            {/* Phone Number */}
+            <div>
+              <label className="block text-gray-700 font-semibold mb-2">
+                <FaPhoneAlt className="inline text-indigo-500 mr-2" />
+                Phone Number <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="+91 98765 43210"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent outline-none transition bg-gray-50 focus:bg-white"
+              />
+              <p className="text-xs text-gray-400 mt-1">Include country code (e.g., +91 for India)</p>
+            </div>
+            
+            {/* Job Preference */}
+            <div>
+              <label className="block text-gray-700 font-semibold mb-2">
+                <FaBriefcase className="inline text-indigo-500 mr-2" />
+                Job Preference <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="jobPreference"
+                value={formData.jobPreference}
+                onChange={handleChange}
+                className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent outline-none bg-gray-50 focus:bg-white cursor-pointer"
+              >
+                {jobOptions.map(option => (
+                  <option key={option.value} value={option.value} disabled={option.value === ''}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            {/* Additional Message */}
+            <div>
+              <label className="block text-gray-700 font-semibold mb-2">
+                <FaCommentDots className="inline text-indigo-500 mr-2" />
+                Additional Message
+              </label>
+              <textarea
+                name="message"
+                rows="4"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Tell us about your experience, skills, portfolio, or anything you'd like to share..."
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-transparent outline-none resize-none bg-gray-50 focus:bg-white"
+              ></textarea>
+            </div>
+            
+            {/* Info Box - Database + WhatsApp */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start gap-3">
+                <FaDatabase className="text-green-600 text-lg mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-green-800">
+                  <p className="font-semibold mb-1">💾 Database Save</p>
+                  <p>Your application will be automatically saved to Firebase database</p>
+                </div>
+              </div>
+              
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start gap-3">
+                <FaWhatsapp className="text-green-600 text-lg mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-blue-800">
+                  <p className="font-semibold mb-1">📱 WhatsApp Notification</p>
+                  <p>WhatsApp will open with your application details</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Status Message */}
+            {status.message && (
+              <div className={`p-4 rounded-lg flex items-start gap-3 ${
+                status.type === 'error' 
+                  ? 'bg-red-50 text-red-700 border-l-4 border-red-500' 
+                  : 'bg-green-50 text-green-700 border-l-4 border-green-500'
+              }`}>
+                {status.type === 'error' ? (
+                  <FaExclamationCircle className="mt-0.5 flex-shrink-0" />
+                ) : (
+                  <FaCheckCircle className="mt-0.5 flex-shrink-0" />
+                )}
+                <span>{status.message}</span>
+              </div>
+            )}
+            
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={`flex-1 py-3 rounded-lg font-bold text-white text-lg transition-all shadow-md flex items-center justify-center gap-2 ${
+                  isSubmitting 
+                    ? 'bg-gray-400 cursor-not-allowed' 
+                    : 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 hover:shadow-lg transform hover:-translate-y-0.5'
+                }`}
+              >
+                {isSubmitting ? (
+                  <>
+                    <FaSpinner className="animate-spin" />
+                    Saving to Database...
+                  </>
+                ) : (
+                  <>
+                    <FaWhatsapp className="text-xl" />
+                    Submit Application
+                  </>
+                )}
+              </button>
+              
+              <button
+                type="button"
+                onClick={resetForm}
+                className="px-6 py-3 rounded-lg font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
+              >
+                <FaUndoAlt />
+                Clear Form
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default JobApplicationForm;
