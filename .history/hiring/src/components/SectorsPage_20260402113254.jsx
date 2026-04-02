@@ -184,7 +184,7 @@ const SectorsPage = () => {
         {/* Stats Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12 md:mb-16">
           <div className="bg-white rounded-2xl p-4 shadow-lg text-center">
-            <div className="text-2xl font-bold text-[#18403C]">50+</div>
+            <div className="text-2xl font-bold text-[#18403C]">750+</div>
             <div className="text-xs text-gray-500">Active Jobs</div>
           </div>
           <div className="bg-white rounded-2xl p-4 shadow-lg text-center">
@@ -192,11 +192,11 @@ const SectorsPage = () => {
             <div className="text-xs text-gray-500">Companies</div>
           </div>
           <div className="bg-white rounded-2xl p-4 shadow-lg text-center">
-            <div className="text-2xl font-bold text-[#18403C]">5K+</div>
+            <div className="text-2xl font-bold text-[#18403C]">20K+</div>
             <div className="text-xs text-gray-500">Candidates</div>
           </div>
           <div className="bg-white rounded-2xl p-4 shadow-lg text-center">
-            <div className="text-2xl font-bold text-[#18403C]">88%</div>
+            <div className="text-2xl font-bold text-[#18403C]">92%</div>
             <div className="text-xs text-gray-500">Success Rate</div>
           </div>
         </div>

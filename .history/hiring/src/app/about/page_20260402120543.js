@@ -104,7 +104,7 @@ const about = () => {
                 <span className="block text-white/90">with Opportunity</span>
               </h1>
               <p className="text-white/90 text-lg mb-8">
-                Zenon Hiring Solutions is your trusted recruitment partner in dehradun, dedicated to bridging the gap between exceptional talent and leading organizations across India.
+                Zenon Hiring Solution is your trusted recruitment partner in Noida, dedicated to bridging the gap between exceptional talent and leading organizations across India.
               </p>
             
             </div>

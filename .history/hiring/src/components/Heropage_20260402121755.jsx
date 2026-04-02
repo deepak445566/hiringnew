@@ -80,7 +80,7 @@ const HeroPage = () => {
         <div className="container mx-auto px-4 mt-20">
           <div className="">
  <h1 className="text-4xl md:text-5xl font-semibold font-light text-red-800 mb-4 park">
-              <span className=" text-[#249CF7]">Zenon</span> Hiring 
+              <span className=" text-[#249CF7]">Zenon</span> Hiring <br></br>
              <span className="text-[#F49623]">Solutions</span>
             </h1>
             <h1 className="text-4xl md:text-5xl font-light text-white mb-4 park">

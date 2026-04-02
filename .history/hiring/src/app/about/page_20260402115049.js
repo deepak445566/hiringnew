@@ -4,22 +4,25 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { 
   FaArrowRight, 
-
+  FaCheckCircle,
   FaUsers,
- 
+  FaChartLine,
   FaGlobe,
   FaTrophy,
   FaHandshake,
   FaLightbulb,
   FaHeart,
   FaStar,
- 
+  FaCalendarAlt,
   FaMapMarkerAlt,
   FaPhoneAlt,
   FaEnvelope,
   FaClock,
   FaBuilding,
- 
+  FaBriefcase,
+  FaRocket,
+  FaAward,
+  FaQuoteLeft
 } from "react-icons/fa";
 import FeaturesPage from "@/components/FeaturesPage";
 
@@ -104,7 +107,7 @@ const about = () => {
                 <span className="block text-white/90">with Opportunity</span>
               </h1>
               <p className="text-white/90 text-lg mb-8">
-                Zenon Hiring Solutions is your trusted recruitment partner in dehradun, dedicated to bridging the gap between exceptional talent and leading organizations across India.
+                Zenon Hiring Solution is your trusted recruitment partner in Noida, dedicated to bridging the gap between exceptional talent and leading organizations across India.
               </p>
             
             </div>
@@ -115,7 +118,6 @@ const about = () => {
   alt="Noida City"
   width={600}
   height={400}
-   loading="eager"
   className="w-full h-96 object-cover"
 />
                 
@@ -203,7 +205,6 @@ const about = () => {
   src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=500&fit=crop"
   alt="Noida City"
   width={600}
-   loading="eager"
   height={400}
   className="w-full h-96 object-cover"
 />
@@ -300,18 +301,17 @@ const about = () => {
           
           <div className="relative rounded-2xl overflow-hidden shadow-xl fade-up-element" id="map">
           <Image
-  src="/images/contact1.jpg"
+  src="https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=600&h=400&fit=crop"
   alt="Noida City"
   width={600}
   height={400}
-   loading="eager"
   className="w-full h-96 object-cover"
 />
             
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-6">
               <div className="bg-white/90 backdrop-blur-sm rounded-xl p-4">
-                <p className="text-[#18403C] font-semibold">Zenon Hiring Solutions</p>
-                <p className="text-sm text-gray-600">dehradun</p>
+                <p className="text-[#18403C] font-semibold">Zenon Hiring Solution</p>
+                <p className="text-sm text-gray-600">Sector 62, Noida</p>
               </div>
             </div>
           </div>
@@ -334,7 +334,10 @@ const about = () => {
               Let's work together to build your dream team. Contact us today for a consultation.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-             
+              <button className="group bg-white text-[#18403C] px-6 md:px-8 py-2.5 md:py-3 rounded-full font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center gap-2 justify-center">
+                Get in Touch
+                <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+              </button>
               <button onClick={goservice} className="border-2 border-white text-white px-6 md:px-8 py-2.5 md:py-3 rounded-full font-semibold hover:bg-white hover:text-[#18403C] transition-all duration-300">
                 View Our Services
               </button>

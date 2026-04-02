@@ -196,7 +196,17 @@ const Footer = () => {
             <p className="text-white/60 text-sm">
               © {currentYear} Zenon Hiring Solutions. All rights reserved.
             </p>
-           
+            <div className="flex gap-6">
+              <Link href="/privacy-policy" className="text-white/60 hover:text-white text-sm transition-colors">
+                Privacy Policy
+              </Link>
+              <Link href="/terms-conditions" className="text-white/60 hover:text-white text-sm transition-colors">
+                Terms & Conditions
+              </Link>
+              <Link href="/sitemap" className="text-white/60 hover:text-white text-sm transition-colors">
+                Sitemap
+              </Link>
+            </div>
           </div>
         </div>
 

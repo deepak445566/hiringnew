@@ -192,11 +192,11 @@ const SectorsPage = () => {
             <div className="text-xs text-gray-500">Companies</div>
           </div>
           <div className="bg-white rounded-2xl p-4 shadow-lg text-center">
-            <div className="text-2xl font-bold text-[#18403C]">5K+</div>
+            <div className="text-2xl font-bold text-[#18403C]">20K+</div>
             <div className="text-xs text-gray-500">Candidates</div>
           </div>
           <div className="bg-white rounded-2xl p-4 shadow-lg text-center">
-            <div className="text-2xl font-bold text-[#18403C]">88%</div>
+            <div className="text-2xl font-bold text-[#18403C]">92%</div>
             <div className="text-xs text-gray-500">Success Rate</div>
           </div>
         </div>

@@ -28,7 +28,7 @@ const Navbar = () => {
     { id: "about", name: "About", path: "/about", icon: FaInfoCircle },
     { id: "services", name: "Services", path: "/services", icon: FaBriefcase },
     { id: "career", name: "Career", path: "/career", icon: FaUserTie },
-    { id: "contact", name: "Contact Us", path: "/ContactPage", icon: FaEnvelope },
+    { id: "contact", name: "Contact Us", path: "/Contact", icon: FaEnvelope },
   ];
 
   // Handle scroll effect

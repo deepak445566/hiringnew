@@ -194,9 +194,19 @@ const Footer = () => {
         <div className="mt-8 pt-6 border-t border-white/20">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/60 text-sm">
-              © {currentYear} Zenon Hiring Solutions. All rights reserved.
+              © {currentYear} Zenon Hiring Solution. All rights reserved.
             </p>
-           
+            <div className="flex gap-6">
+              <Link href="/privacy-policy" className="text-white/60 hover:text-white text-sm transition-colors">
+                Privacy Policy
+              </Link>
+              <Link href="/terms-conditions" className="text-white/60 hover:text-white text-sm transition-colors">
+                Terms & Conditions
+              </Link>
+              <Link href="/sitemap" className="text-white/60 hover:text-white text-sm transition-colors">
+                Sitemap
+              </Link>
+            </div>
           </div>
         </div>
 

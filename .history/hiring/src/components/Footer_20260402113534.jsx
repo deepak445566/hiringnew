@@ -38,18 +38,18 @@ const Footer = () => {
   ];
 
   const services = [
-    { name: "Information Technology", path: "#" },
-    { name: "Customer Service", path: "#" },
-    { name: "Human Resource", path: "#" },
-    { name: "BFSI", path: "#" },
-    { name: "Manufacturing & Processes", path: "#" },
-    { name: "Automobile", path: "#" },
+    { name: "Information Technology", path: "/services#infrastructure" },
+    { name: "Customer Service", path: "/services#mining" },
+    { name: "Human Resource", path: "/services#power" },
+    { name: "BFSI", path: "/services#telecom" },
+    { name: "Manufacturing & Processes", path: "/services#manufacturing" },
+    { name: "Automobile", path: "/services#aviation" },
     { name: "Power & Energy", path: "#" },
   ];
 
   const contactInfo = [
-    { icon: FaMapMarkerAlt, text: "Dehradun", link: null },
-    { icon: FaPhoneAlt, text: "+91 9650321947", link: "tel:+919650321947" },
+    { icon: FaMapMarkerAlt, text: "B-45, Sector 62, Noida, Uttar Pradesh - 201301, India", link: null },
+    { icon: FaPhoneAlt, text: "+91 98765 43210", link: "tel:+919876543210" },
     { icon: FaEnvelope, text: "info@zenonhiring.com", link: "mailto:info@zenonhiring.com" },
     { icon: FaClock, text: "Mon - Fri: 9:00 AM - 6:00 PM", link: null },
   ];
@@ -188,15 +188,44 @@ const Footer = () => {
           </div>
         </div>
 
-        
+        {/* Newsletter Section */}
+        <div className="mt-12 pt-8 border-t border-white/20">
+          <div className="grid md:grid-cols-2 gap-6 items-center">
+            <div>
+              <h3 className="text-xl font-bold mb-2">Subscribe to Our Newsletter</h3>
+              <p className="text-white/70 text-sm">Get the latest job updates and career tips directly in your inbox.</p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input 
+                type="email" 
+                placeholder="Enter your email address"
+                className="flex-1 px-4 py-3 rounded-full bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-[#2c6b64] transition-all"
+              />
+              <button className="group bg-[#2c6b64] hover:bg-[#18403C] px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 shadow-lg">
+                Subscribe
+                <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Bottom Bar */}
         <div className="mt-8 pt-6 border-t border-white/20">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/60 text-sm">
-              © {currentYear} Zenon Hiring Solutions. All rights reserved.
+              © {currentYear} Zenon Hiring Solution. All rights reserved.
             </p>
-           
+            <div className="flex gap-6">
+              <Link href="/privacy-policy" className="text-white/60 hover:text-white text-sm transition-colors">
+                Privacy Policy
+              </Link>
+              <Link href="/terms-conditions" className="text-white/60 hover:text-white text-sm transition-colors">
+                Terms & Conditions
+              </Link>
+              <Link href="/sitemap" className="text-white/60 hover:text-white text-sm transition-colors">
+                Sitemap
+              </Link>
+            </div>
           </div>
         </div>
 
