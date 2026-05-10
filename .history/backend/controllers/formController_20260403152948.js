@@ -12,7 +12,7 @@ export const submitForm = async (req, res) => {
       const result = await cloudinary.uploader.upload(req.file.path, {
         resource_type: "raw",
         folder: "resumes", 
-      
+        // Optional: organize files in folders
       });
       resumeUrl = result.secure_url;
     }
@@ -33,6 +33,7 @@ export const submitForm = async (req, res) => {
     });
 
   } catch (err) {
+    // Handle duplicate email error
     if (err.code === 11000) {
       return res.status(400).json({ 
         success: false, 

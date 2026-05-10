@@ -82,7 +82,7 @@ const Footer = () => {
           {/* Company Info Section */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <img src="/images/logook.png" className="h-25 w-45" alt="Company Logo"/>
+              <img src="/images/logook.png" className="h-lg:h-25 lg:w-45" alt="Company Logo"/>
             </div>
             <p className="text-white/80 text-sm leading-relaxed">
               Your trusted recruitment partner in Noida, dedicated to connecting exceptional talent with leading organizations across India.

@@ -33,6 +33,7 @@ export const submitForm = async (req, res) => {
     });
 
   } catch (err) {
+    // Handle duplicate email error
     if (err.code === 11000) {
       return res.status(400).json({ 
         success: false, 

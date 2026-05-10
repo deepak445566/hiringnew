@@ -1,4 +1,4 @@
-
+// models/Form.js
 import mongoose from "mongoose";
 
 const formSchema = new mongoose.Schema({
@@ -21,7 +21,7 @@ const formSchema = new mongoose.Schema({
     trim: true,
     validate: {
       validator: function(phone) {
-       
+        // Remove any non-digit characters
         const cleanPhone = phone.replace(/\D/g, '');
        
         return /^\d{10}$/.test(cleanPhone);

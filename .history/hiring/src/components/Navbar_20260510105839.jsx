@@ -71,7 +71,7 @@ const Navbar = () => {
             onClick={() => handleNavClick("home", "/")}
           >
             <div className="relative">
-              <img src="/images/logook.png" className=" h-15 lg:h-17 w-36" alt="Logo"/>
+              <img src="/images/logook.png" className=" h-12 lg:h-17 w-36" alt="Logo"/>
             </div>
           </div>
 
