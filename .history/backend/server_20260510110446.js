@@ -1,4 +1,4 @@
-// server.js
+
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: "https://hiringnew-umber.vercel.app/",
   credentials: true
 }));
 app.use(express.json());
